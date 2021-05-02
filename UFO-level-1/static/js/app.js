@@ -33,5 +33,16 @@ function runEnter(){
     //console.log(inputValue);
     
     var filteredTable = tableData.filter(ufoSightings => ufoSightings.datetime === filterDate);
-    console.log(filteredTable);
+    //console.log(filteredTable);
+    ufoTableBody.html("");
+
+    filteredTable.forEach( (ufoReport) =>{
+        var ufoRow = ufoTableBody.append("tr");
+    
+        Object.entries(ufoReport).forEach(([key,value]) => {
+            //console.log(key,value);
+            var ufoCell = ufoRow.append("td");
+            ufoCell.text(value);
+        });
+    });
 }
