@@ -36,6 +36,10 @@ function myState(){
     removeAll(stateSelect);
 
     stateList = [];
+    var opt = document.createElement("option");
+    opt.value = "all";
+    opt.text = "All";
+    stateSelect.appendChild(opt);
 
     console.log("First selection");
     var ss = tableData.map(function (stateListFn) {
@@ -63,12 +67,16 @@ function myCity(){
     removeAll(citySelect);
 
     cityList = [];
-
+    var opt = document.createElement("option");
+    opt.value = "all";
+    opt.text = "All";
+    citySelect.appendChild(opt);
+    
     console.log("First selection");
     var cs = tableData.map(function (cityListFn) {
         if (cityListFn.state == stateSel){
             console.log("First list append");
-            var city = cityListFn.state;
+            var city = cityListFn.city;
             if (!(cityList.includes(city))){
         
                 cityList.push(city);
