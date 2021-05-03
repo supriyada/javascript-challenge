@@ -57,7 +57,29 @@ function myState(){
 //generates the list of cities based on state selected
 var cityList = [];
 var citySelect = document.getElementById("city");
-function myCity(){}
+function myCity(){
+    var stateSel = stateSelect.value;
+
+    removeAll(citySelect);
+
+    cityList = [];
+
+    console.log("First selection");
+    var cs = tableData.map(function (cityListFn) {
+        if (cityListFn.state == stateSel){
+            console.log("First list append");
+            var city = cityListFn.state;
+            if (!(cityList.includes(city))){
+        
+                cityList.push(city);
+                var opt = document.createElement("option");
+                opt.value = city;
+                opt.text = city;
+                citySelect.appendChild(opt);
+            }
+        }
+    })
+}
 
 //appends a table to the web page and then adds new rows of data for each UFO sighting
 var ufoTableBody = d3.select("tbody");
