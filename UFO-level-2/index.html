@@ -39,21 +39,28 @@
                         <label for="date">Enter a Date</label>
                         <input class="form-control" id="datetime" type="text" placeholder="1/11/2011">
                       </li>
+
+                      <li class="filter list-group-item">
+                        <label for="date">Country</label>
+                        <select name="country" id="country" onchange="myState()">
+                          <option value="">--Select country--</option>
+                        </select>
+                      </li>
+
+                      <li class="filter list-group-item">
+                        <label for="date">State</label>
+                        <select name="state" id="state" onchange="myCity()">
+                          <option value="">--Select state--</option>
+                        </select>
+                      </li>
+                      
                       <li class="filter list-group-item">
                         <label for="date">City</label>
                         <select name="city" id="city">
+                          <option value="">--Select city--</option>
                         </select>
                       </li>
-                      <li class="filter list-group-item">
-                        <label for="date">State</label>
-                        <select name="state" id="state">
-                        </select>
-                      </li>
-                      <li class="filter list-group-item">
-                        <label for="date">Country</label>
-                        <select name="country" id="country">
-                        </select>
-                      </li>
+
                       <li class="filter list-group-item">
                         <label for="date">Shape</label>
                         <select name="shape" id="shape">
