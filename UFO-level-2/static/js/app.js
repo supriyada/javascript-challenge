@@ -8,17 +8,14 @@ var countrySelect = document.getElementById('country');
 var countryList = [];
 var countryData = tableData.map(countryListFn => countryListFn.country);
 countryData.forEach((country) => {
-    if (!(countryList.includes(country))){
-        
+    if (!(countryList.includes(country))){     
         countryList.push(country);
         var opt = document.createElement("option");
         opt.value = country;
-        opt.text = country;
+        opt.text = country.toUpperCase();
         countrySelect.appendChild(opt);
     }
 });
-console.log(countryList);
-
 
 // To empty the select option
 function removeAll(selectBox,selList) {
@@ -26,6 +23,16 @@ function removeAll(selectBox,selList) {
         selectBox.remove(0);
     }
 }
+
+//To convert to titlecase
+function toTitleCase(str) {
+    return str.replace(
+      /\w\S*/g,
+      function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      }
+    );
+  }
 
 //generates list of states based on country selected
 var stateList = [];
@@ -41,17 +48,15 @@ function myState(){
     opt.text = "All";
     stateSelect.appendChild(opt);
 
-    console.log("First selection");
     var ss = tableData.map(function (stateListFn) {
         if (stateListFn.country == countrySel){
-            console.log("First list append");
             var state = stateListFn.state;
             if (!(stateList.includes(state))){
         
                 stateList.push(state);
                 var opt = document.createElement("option");
                 opt.value = state;
-                opt.text = state;
+                opt.text = state.toUpperCase();
                 stateSelect.appendChild(opt);
             }
         }
@@ -72,22 +77,51 @@ function myCity(){
     opt.text = "All";
     citySelect.appendChild(opt);
     
-    console.log("First selection");
     var cs = tableData.map(function (cityListFn) {
         if (cityListFn.state == stateSel){
-            console.log("First list append");
             var city = cityListFn.city;
             if (!(cityList.includes(city))){
         
                 cityList.push(city);
                 var opt = document.createElement("option");
                 opt.value = city;
-                opt.text = city;
+                opt.text = toTitleCase(city);
                 citySelect.appendChild(opt);
             }
         }
     })
 }
+
+//generate the shape of UFO's spotted
+var shapeList = [];
+var shapeSelect = document.getElementById("shape");
+function myShape(){
+    
+    var citySel = citySelect.value;
+
+    removeAll(shapeSelect);
+
+    shapeList = [];
+    var opt = document.createElement("option");
+    opt.value = "all";
+    opt.text = "All";
+    shapeSelect.appendChild(opt);
+    
+    var shapeS = tableData.map(function (shapeListFn) {
+        if (shapeListFn.city == citySel){
+            var shape = shapeListFn.shape;
+            if (!(shapeList.includes(shape))){
+        
+                shapeList.push(shape);
+                var opt = document.createElement("option");
+                opt.value = shape;
+                opt.text = toTitleCase(shape);
+                shapeSelect.appendChild(opt);
+            }
+        }
+    })
+}
+
 
 //appends a table to the web page and then adds new rows of data for each UFO sighting
 var ufoTableBody = d3.select("tbody");
@@ -115,7 +149,10 @@ function runEnter(){
 
     var filterDate = inputElement.property("value");
 
-    //console.log(inputValue);
+    console.log(`Country:${countrySelect.value}`);
+    console.log(`State:${stateSelect.value}`);
+    console.log(`City:${citySelect.value}`);
+    console.log(`Shape:${shapeSelect.value}`);
     
     var filteredTable = tableData.filter(ufoSightings => ufoSightings.datetime === filterDate);
 
