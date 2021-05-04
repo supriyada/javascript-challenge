@@ -122,7 +122,6 @@ function myShape(){
     })
 }
 
-
 //appends a table to the web page and then adds new rows of data for each UFO sighting
 var ufoTableBody = d3.select("tbody");
 tableData.forEach( (ufoReport) =>{
@@ -154,7 +153,9 @@ function runEnter(){
     console.log(`City:${citySelect.value}`);
     console.log(`Shape:${shapeSelect.value}`);
     
-    var filteredTable = tableData.filter(ufoSightings => ufoSightings.datetime === filterDate);
+    var filteredTable = tableData.filter(ufoSightings => 
+        ((ufoSightings.datetime === filterDate) && (ufoSightings.country === countrySelect.value)
+        && (ufoSightings.state === stateSelect.value)));
 
     //console.log(filteredTable);
     ufoTableBody.html("");
