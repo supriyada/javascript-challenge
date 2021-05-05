@@ -123,6 +123,15 @@ function myShape(){
     })
 }
 
+function isEmpty(s){
+    return !s.length;    
+}
+
+function isBlank(s){
+    return isEmpty(s.trim());    
+}
+
+//***************************
 //appends a table to the web page and then adds new rows of data for each UFO sighting
 var ufoTableBody = d3.select("tbody");
 function tableLoad(){
@@ -155,22 +164,26 @@ function runEnter(){
     console.log(`State:${stateSelect.value}`);
     console.log(`City:${citySelect.value}`);
     console.log(`Shape:${shapeSelect.value}`);
+    console.log(`Date:${filterDate}`);
 
     var country = countrySelect.value;
     var state = stateSelect.value;
     var city = citySelect.value;
     var shape = shapeSelect.value;
 
-    if (country != null && state != null && city != null && shape != null && filterDate != null){
+    if (!(isBlank(country)) && (!(isBlank(state))) && (!(isBlank(city))) && (!(isBlank(shape))) && (!(isBlank(filterDate)))){
+        console.log("Inside if")
         var filteredTable = tableData.filter(ufoSightings => 
         ((ufoSightings.datetime === filterDate) && (ufoSightings.country === country)
         && (ufoSightings.state === state) && (ufoSightings.city === city)
         && (ufoSightings.shape === shape)));
     }
-    else if (country != null && state != null && city != null && shape != null){
+    else if (!(isBlank(country)) && (!(isBlank(state))) && (!(isBlank(city))) && (!(isBlank(shape))) && (isBlank(filterDate))){
+        console.log("Inside else if")
         var filteredTable = tableData.filter(ufoSightings => 
             ((ufoSightings.country === country) && (ufoSightings.state === state) && (ufoSightings.city === city)
-            && (ufoSightings.shape === shape)));
+            && (ufoSightings.shape === shape))); 
+        console.log(filteredTable);
     }
     else{
         tableLoad();
