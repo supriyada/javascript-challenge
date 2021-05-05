@@ -170,28 +170,50 @@ function runEnter(){
     var state = stateSelect.value;
     var city = citySelect.value;
     var shape = shapeSelect.value;
-    var allData = 'all';
-
-    if (!(isBlank(country)) && (!(isBlank(state))) && (!(isBlank(city))) && (!(isBlank(shape))) && (!(isBlank(filterDate)))){
+    
+    if (!(isBlank(country))){
+        if((!(isBlank(state))) && (state != "all")){
+            if((!(isBlank(city))) && (city != "all")){
+                if((!(isBlank(shape))) && (shape != "all")){
+                    if(!(isBlank(filterDate))){
+                        var filteredTable = tableData.filter(ufoSightings => 
+                            ((ufoSightings.datetime === filterDate) && (ufoSightings.country === country)
+                            && (ufoSightings.state === state) && (ufoSightings.city === city)
+                            && (ufoSightings.shape === shape)));
+                    }
+                    else{
+                        var filteredTable = tableData.filter(ufoSightings => 
+                            ((ufoSightings.country === country)
+                            && (ufoSightings.state === state) && (ufoSightings.city === city)
+                            && (ufoSightings.shape === shape)));
+                    }
+                 
+                }
+                else if((!(isBlank(city))) && (city === "all")){
+                    var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country)) 
+                    && (ufoSightings.state === state) && (ufoSightings.city === city));
+                }
+                else{
+                    var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country))
+                    && (ufoSightings.state === state) && (ufoSightings.city === city));
+                }          
+            }
+            else if((!(isBlank(city))) && (city === "all")){
+                var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country)) 
+                && (ufoSightings.state === state));
+            }
+            else{
+                var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country))
+                && (ufoSightings.state === state));
+            }
         
-        var filteredTable = tableData.filter(ufoSightings => 
-        ((ufoSightings.datetime === filterDate) && (ufoSightings.country === country)
-        && (ufoSightings.state === state) && (ufoSightings.city === city)
-        && (ufoSightings.shape === shape)));
-    }
-    else if (!(isBlank(country)) && (!(isBlank(state))) && (!(isBlank(city))) && (!(isBlank(shape))) && (isBlank(filterDate))){
-        
-        var filteredTable = tableData.filter(ufoSightings => 
-            ((ufoSightings.country === country) && (ufoSightings.state === state) && (ufoSightings.city === city)
-            && (ufoSightings.shape === shape))); 
-        console.log(filteredTable);
-    }
-    else if (!(isBlank(country)) && (!(isBlank(state))) && (!(isBlank(city))) && (shape.trim() === allData)
-            && (isBlank(filterDate))){
-        console.log("Inside else if2")
-        var filteredTable = tableData.filter(ufoSightings => 
-            ((ufoSightings.country === country) && (ufoSightings.state === state) && (ufoSightings.city === city))); 
-        console.log(filteredTable);
+        }
+        else if((!(isBlank(state))) && (state === "all")){
+            var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country)));
+        }
+        else{
+            var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country)));
+        }
     }
     else{
         tableLoad();
