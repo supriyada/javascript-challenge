@@ -7,6 +7,7 @@ var tableData = data;
 var countrySelect = document.getElementById('country');
 var countryList = [];
 var countryData = tableData.map(countryListFn => countryListFn.country);
+
 countryData.forEach((country) => {
     if (!(countryList.includes(country))){     
         countryList.push(country);
@@ -124,6 +125,7 @@ function myShape(){
 
 //appends a table to the web page and then adds new rows of data for each UFO sighting
 var ufoTableBody = d3.select("tbody");
+function tableLoad(){
 tableData.forEach( (ufoReport) =>{
     var ufoRow = ufoTableBody.append("tr");
     
@@ -133,7 +135,8 @@ tableData.forEach( (ufoReport) =>{
         ufoCell.text(value);
     });
 });
-
+}
+tableLoad();
 //search through the `date/time` column to find rows that match user input
 var ufoButton = d3.select("#filter-btn");
 var ufoForm = d3.select("#form");
@@ -152,10 +155,27 @@ function runEnter(){
     console.log(`State:${stateSelect.value}`);
     console.log(`City:${citySelect.value}`);
     console.log(`Shape:${shapeSelect.value}`);
-    
-    var filteredTable = tableData.filter(ufoSightings => 
-        ((ufoSightings.datetime === filterDate) && (ufoSightings.country === countrySelect.value)
-        && (ufoSightings.state === stateSelect.value)));
+
+    var country = countrySelect.value;
+    var state = stateSelect.value;
+    var city = citySelect.value;
+    var shape = shapeSelect.value;
+
+    if (country != null && state != null && city != null && shape != null && filterDate != null){
+        var filteredTable = tableData.filter(ufoSightings => 
+        ((ufoSightings.datetime === filterDate) && (ufoSightings.country === country)
+        && (ufoSightings.state === state) && (ufoSightings.city === city)
+        && (ufoSightings.shape === shape)));
+    }
+    else if (country != null && state != null && city != null && shape != null){
+        var filteredTable = tableData.filter(ufoSightings => 
+            ((ufoSightings.country === country) && (ufoSightings.state === state) && (ufoSightings.city === city)
+            && (ufoSightings.shape === shape)));
+    }
+    else{
+        tableLoad();
+    }
+
 
     //console.log(filteredTable);
     ufoTableBody.html("");
