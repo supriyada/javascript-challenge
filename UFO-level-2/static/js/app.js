@@ -219,17 +219,21 @@ function runEnter(){
         tableLoad();
     }
 
-
+    if (isBlank(filteredTable)){
+        console.log("No records found");
+    }
+    else{
     //console.log(filteredTable);
-    ufoTableBody.html("");
+        ufoTableBody.html("");
 
-    filteredTable.forEach( (ufoReport) =>{
-        var ufoRow = ufoTableBody.append("tr");
-    
-        Object.entries(ufoReport).forEach(([key,value]) => {
-            //console.log(key,value);
-            var ufoCell = ufoRow.append("td");
-            ufoCell.text(value);
+        filteredTable.forEach( (ufoReport) =>{
+            var ufoRow = ufoTableBody.append("tr");
+        
+            Object.entries(ufoReport).forEach(([key,value]) => {
+                //console.log(key,value);
+                var ufoCell = ufoRow.append("td");
+                ufoCell.text(value);
+            });
         });
-    });
+    }
 }
