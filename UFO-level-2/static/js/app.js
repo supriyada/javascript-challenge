@@ -170,19 +170,27 @@ function runEnter(){
     var state = stateSelect.value;
     var city = citySelect.value;
     var shape = shapeSelect.value;
+    var allData = 'all';
 
     if (!(isBlank(country)) && (!(isBlank(state))) && (!(isBlank(city))) && (!(isBlank(shape))) && (!(isBlank(filterDate)))){
-        console.log("Inside if")
+        
         var filteredTable = tableData.filter(ufoSightings => 
         ((ufoSightings.datetime === filterDate) && (ufoSightings.country === country)
         && (ufoSightings.state === state) && (ufoSightings.city === city)
         && (ufoSightings.shape === shape)));
     }
     else if (!(isBlank(country)) && (!(isBlank(state))) && (!(isBlank(city))) && (!(isBlank(shape))) && (isBlank(filterDate))){
-        console.log("Inside else if")
+        
         var filteredTable = tableData.filter(ufoSightings => 
             ((ufoSightings.country === country) && (ufoSightings.state === state) && (ufoSightings.city === city)
             && (ufoSightings.shape === shape))); 
+        console.log(filteredTable);
+    }
+    else if (!(isBlank(country)) && (!(isBlank(state))) && (!(isBlank(city))) && (shape.trim() === allData)
+            && (isBlank(filterDate))){
+        console.log("Inside else if2")
+        var filteredTable = tableData.filter(ufoSightings => 
+            ((ufoSightings.country === country) && (ufoSightings.state === state) && (ufoSightings.city === city))); 
         console.log(filteredTable);
     }
     else{
