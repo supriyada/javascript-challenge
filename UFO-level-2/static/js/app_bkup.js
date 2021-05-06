@@ -2,106 +2,43 @@
 var tableData = data;
 
 //console.log(tableData);
+
+var city = document.getElementById("city");
+var state = document.getElementById("state");
+var shape = document.getElementById("shape");
+var country = document.getElementById("country");
+var optSelect = [country,city,state,shape];
+console.log(optSelect);
+
+//adds the list of countries to the select option
+function countryLoad(){
 var countryList = [];
 var countryData = tableData.map(countryListFn => countryListFn.country);
 
-var countrySelect = document.getElementById("country");
 countryData.forEach((countryName) => {
     if (!(countryList.includes(countryName))){     
         countryList.push(countryName);
         var opt = document.createElement("option");
         opt.value = countryName;
         opt.text = countryName.toUpperCase();
-        countrySelect.appendChild(opt);
+        country.appendChild(opt);
     }
 });
+}
 
-//generates list of states based on country selected
+function shapeLoad(){
 var stateList = [];
-var stateSelect = document.getElementById("state");
-function myState(){
-    var countrySel = countrySelect.value;
+var stateData = tableData.map(stateListFn => stateListFn.state);
 
-    removeAll(stateSelect);
-
-    stateList = [];
-    var opt = document.createElement("option");
-    opt.value = "all";
-    opt.text = "All";
-    stateSelect.appendChild(opt);
-
-    var ss = tableData.map(function (stateListFn) {
-        if (stateListFn.country == countrySel){
-            var state = stateListFn.state;
-            if (!(stateList.includes(state))){
-        
-                stateList.push(state);
-                var opt = document.createElement("option");
-                opt.value = state;
-                opt.text = state.toUpperCase();
-                stateSelect.appendChild(opt);
-            }
-        }
-    })
-}
-
-//generates the list of cities based on state selected
-var cityList = [];
-var citySelect = document.getElementById("city");
-function myCity(){
-    var stateSel = stateSelect.value;
-
-    removeAll(citySelect);
-
-    cityList = [];
-    var opt = document.createElement("option");
-    opt.value = "all";
-    opt.text = "All";
-    citySelect.appendChild(opt);
-    
-    var cs = tableData.map(function (cityListFn) {
-        if (cityListFn.state == stateSel ){
-            var city = cityListFn.city;
-            if (!(cityList.includes(city))){
-        
-                cityList.push(city);
-                var opt = document.createElement("option");
-                opt.value = city;
-                opt.text = toTitleCase(city);
-                citySelect.appendChild(opt);
-            }
-        }
-    })
-}
-
-//generate the shape of UFO's spotted
-var shapeList = [];
-var shapeSelect = document.getElementById("shape");
-function myShape(){
-    
-    var citySel = citySelect.value;
-
-    removeAll(shapeSelect);
-
-    shapeList = [];
-    var opt = document.createElement("option");
-    opt.value = "all";
-    opt.text = "All";
-    shapeSelect.appendChild(opt);
-    
-    var shapeS = tableData.map(function (shapeListFn) {
-        if (shapeListFn.city == citySel){
-            var shape = shapeListFn.shape;
-            if (!(shapeList.includes(shape))){
-        
-                shapeList.push(shape);
-                var opt = document.createElement("option");
-                opt.value = shape;
-                opt.text = toTitleCase(shape);
-                shapeSelect.appendChild(opt);
-            }
-        }
-    })
+stateData.forEach((stateName) => {
+    if (!(stateList.includes(stateName))){     
+        stateList.push(stateName);
+        var opt = document.createElement("option");
+        opt.value = stateName;
+        opt.text = stateName.toUpperCase();
+        state.appendChild(opt);
+    }
+});
 }
 
 // To empty the select option
@@ -121,6 +58,69 @@ function toTitleCase(str) {
     );
 }
 
+  
+ function myChange(element){
+    var sampleList = [];
+    var optionChoosen = element.name;
+    console.log(`You chose: ${element.value}`);
+    
+    switch (optionChoosen){
+        case country:
+            
+            optSelect.forEach(function (item){
+                var option = item.name;
+                //var optCheck = item.value;
+                console.log(optionChoosen);
+                removeAll(item);
+                console.log(`Removed ${item}`);
+                
+                                
+                var opt = document.createElement("option");
+                opt.value = "all";
+                opt.text = "All";
+                item.appendChild(opt);
+                var ss = tableData.map(function (ListFn) {
+                
+                    if(ListFn[optionChoosen] == element.value){
+                        var state = ListFn[option];
+                        console.log(option);
+                        if (!(sampleList.includes(state))){
+                            console.log("Inside state list");
+                            sampleList.push(state);
+                            var opt = document.createElement("option");
+                            opt.value = state;
+                            opt.text = state.toUpperCase();
+                            item.appendChild(opt);
+                        }
+                                    
+                    }
+                })
+                if (optionChoosen === item){
+                    countryLoad();
+                }
+                
+            });
+            break;
+        case state:
+            break;
+        case city:
+            break;
+        case shape:
+            break;
+    }    
+      
+}
+      
+     
+
+function isEmpty(s){
+    return !s.length;    
+}
+
+function isBlank(s){
+    return isEmpty(s.trim());    
+}
+
 //***************************
 //appends a table to the web page and then adds new rows of data for each UFO sighting
 var ufoTableBody = d3.select("tbody");
@@ -136,8 +136,8 @@ tableData.forEach( (ufoReport) =>{
 });
 }
 tableLoad();
-//countryLoad();
-//stateLoad();
+countryLoad();
+stateLoad();
 //search through the `date/time` column to find rows that match user input
 var ufoButton = d3.select("#filter-btn");
 var ufoForm = d3.select("#form");
