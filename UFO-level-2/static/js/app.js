@@ -74,9 +74,19 @@ function myState(){
 function myCity(){
     var stateSel = d3.select("#state").node().value;
     console.log(stateSel)
+    removeAll(citySelect);
+    var opt = document.createElement("option");
+    opt.value = "selection";
+    opt.text = "<--Select-->";
+    citySelect.appendChild(opt);
+    var opt = document.createElement("option");
+    opt.value = "all";
+    opt.text = "All";
+    citySelect.appendChild(opt);
+
     if(stateSel === 'all'){
         console.log(stateSel)
-        removeAll(citySelect);
+        
         removeAll(shapeSelect);
         console.log("inside all");
         list1 = [];
@@ -106,17 +116,10 @@ function myCity(){
         console.log(stateData);
     }
     else{
-    removeAll(citySelect);
+    
 
     cityList = [];
-    var opt = document.createElement("option");
-    opt.value = "selection";
-    opt.text = "<--Select-->";
-    citySelect.appendChild(opt);
-    var opt = document.createElement("option");
-    opt.value = "all";
-    opt.text = "All";
-    citySelect.appendChild(opt);
+    
     
     var cs = tableData.map(function (cityListFn) {
         if (cityListFn.state == stateSel ){
@@ -135,12 +138,7 @@ function myCity(){
 
 //generate the shape of UFO's spotted
 function myShape(){
-    
-    var citySel = citySelect.value;
-
     removeAll(shapeSelect);
-
-    shapeList = [];
     var opt = document.createElement("option");
     opt.value = "selection";
     opt.text = "<--Select-->";
@@ -149,7 +147,48 @@ function myShape(){
     opt.value = "all";
     opt.text = "All";
     shapeSelect.appendChild(opt);
+
+    var citySel  = d3.select("#city").node().value;
+    console.log(citySel)
+    if (citySel == "all" && stateSelect.value == "all"){
+        var slist = [];
+        var sData = tableData.filter(cityFn => cityFn.country == countrySelect.value);
+        var shapeData = sData.map(sListFn => sListFn.shape);
+
+        shapeData.forEach((shapeName) => {
+        if (!(slist.includes(shapeName))){     
+            slist.push(shapeName);
+            var opt = document.createElement("option");
+            opt.value = shapeName;
+            opt.text = toTitleCase(shapeName);
+            shapeSelect.appendChild(opt);
+        }
+    });
+    }
+    else if(citySel === 'all'){
+        console.log("City selected all")
+        
+        console.log("inside all");
+        list2 = [];
+        var cityData = tableData.filter(shapeFn => shapeFn.state == stateSelect.value);
+        cityData.map(function(stateFn){
+            var shape = stateFn.shape;
+            
+            if (!(list2.includes(shape))){
+        
+                list2.push(shape);
+                var opt = document.createElement("option");
+                opt.value = shape;
+                opt.text = toTitleCase(shape);
+                shapeSelect.appendChild(opt);
+            }
+        })
+        //console.log(stateData);
+    }
     
+    else{ 
+    shapeList = [];
+       
     var shapeS = tableData.map(function (shapeListFn) {
         if (shapeListFn.city == citySel){
             var shape = shapeListFn.shape;
@@ -162,7 +201,7 @@ function myShape(){
                 shapeSelect.appendChild(opt);
             }
         }
-    })
+    })}
 }
 
 // To empty the select option
@@ -314,10 +353,13 @@ function runEnter(){
     if (dateTable != null){
         var filteredTable = dateTable;
     }
+    console.log("Final table");
+    console.log(filteredTable);
 
-    if (filteredTable == null){
+    if (filteredTable.length == 0){
         ufoTableBody.html("");
         console.log("No records found");
+        window.alert("No matches found for the filter criteria. Please try some other combination!")
     }
     else{
     //console.log(filteredTable);
