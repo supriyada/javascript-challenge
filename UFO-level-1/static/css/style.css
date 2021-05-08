@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  font-family: Ubuntu, sans-serif;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 html,
@@ -18,6 +18,15 @@ body {
   overflow: auto;
 }
 
+#filter-btn{
+  background-color: rgb(104, 120, 150);
+  margin-left: 25px;
+  margin-bottom: 10px;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+}
+
 /* The footer is positioned at the bottom of the page */
 .footer {
   position: absolute;
@@ -26,6 +35,7 @@ body {
   left: 0;
   min-height: 100px;
   background: #4e5d6c;
+  text-align: center;
 }
 
 /* The code styles the text at the bottom of the footer */
@@ -94,7 +104,7 @@ select {
 /* The styles for the parallax */
 .hero {
   position: relative;
-  height: 550px;
+  height: 200px;
   padding: 20px;
   margin: 0;
   background: black;
@@ -105,7 +115,7 @@ select {
 }
 
 .hero h1 {
-  margin-top: 200px;
+  margin-top: 10px;
   font-size: 0.1rem;
   animation: title 1.2s forwards linear;
 }
@@ -138,6 +148,7 @@ select {
   color: #8e979f;
 }
 
+
 /* media queries which will only be activated at specific screen sizes */
 @media (max-width: 800px) {
   #table-area td {
@@ -153,7 +164,7 @@ select {
   #table-area tr td:first-child {
     font-size: 1.8em;
     font-weight: bold;
-    background: #1b3146;
+    background: #8158c2;
   }
 
   #table-area tr td:last-child {
@@ -166,7 +177,7 @@ select {
     height: 1px;
     margin-top: 20px;
     content: " ";
-    background: aliceblue;
+    background: rgb(187, 198, 207);
   }
 
   #table-area td {

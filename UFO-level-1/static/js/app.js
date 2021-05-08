@@ -29,20 +29,26 @@ function runEnter(){
     var inputElement = d3.select("#datetime");
 
     var filterDate = inputElement.property("value");
-
-    //console.log(inputValue);
-    
+  
     var filteredTable = tableData.filter(ufoSightings => ufoSightings.datetime === filterDate);
-    //console.log(filteredTable);
-    ufoTableBody.html("");
 
-    filteredTable.forEach( (ufoReport) =>{
-        var ufoRow = ufoTableBody.append("tr");
-    
-        Object.entries(ufoReport).forEach(([key,value]) => {
-            //console.log(key,value);
-            var ufoCell = ufoRow.append("td");
-            ufoCell.text(value);
+    //Alerts if no records are found for the criteria
+    if (filteredTable.length == 0){
+        ufoTableBody.html("");
+        
+        window.alert("No matches found for the filter criteria. Please try some other combination!")
+    }
+    else{
+        //Clear the previous table
+        ufoTableBody.html("");
+        //Load the filtered data into table
+        filteredTable.forEach( (ufoReport) =>{
+            var ufoRow = ufoTableBody.append("tr");
+        
+            Object.entries(ufoReport).forEach(([key,value]) => {
+                var ufoCell = ufoRow.append("td");
+                ufoCell.text(value);
+            });
         });
-    });
+    }
 }

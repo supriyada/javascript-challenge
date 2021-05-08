@@ -267,6 +267,25 @@ function runEnter(){
         var cityTable = stateTable.filter(ufoSightings => (ufoSightings.city === city));
     }
     else if (!(isBlank(city)) && (city === "all")){
+        shlist = [];
+        removeAll(shapeSelect);
+        var opt = document.createElement("option");
+        opt.value = "all";
+        opt.text = "All";
+        shapeSelect.appendChild(opt);
+        stateTable.map(function (shapeListFn) {
+            if (shapeListFn.state == state){
+                var shape = shapeListFn.shape;
+                if (!(shlist.includes(shape))){
+
+                    shlist.push(shape);
+                    var opt = document.createElement("option");
+                    opt.value = shape;
+                    opt.text = toTitleCase(shape);
+                    shapeSelect.appendChild(opt);
+                }
+            }
+        })
         var cityTable = stateTable;
     }
     else{
