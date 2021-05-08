@@ -1,7 +1,7 @@
 # Javascript-challenge
 
 ### Overview:
-`ALIENS-R-REAL` have collected all of the eye-witness reports of ufo sightings. That dataset is then used to create a webpage with data getting displayed dynamically.
+`ALIENS-R-REAL` have collected all of the eye-witness reports of ufo sightings. That dataset is used to create a webpage with table getting displayed dynamically based on various filter criteria.
 
 ### Technologies used:
 >> Javascript <br>
