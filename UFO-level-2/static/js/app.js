@@ -2,6 +2,7 @@
 var tableData = data;
 
 //console.log(tableData);
+//Populate the drop down menu with unique list of countries in the dataset
 var countryList = [];
 var countryData = tableData.map(countryListFn => countryListFn.country);
 
@@ -16,21 +17,7 @@ countryData.forEach((countryName) => {
     }
 });
 
-/*var shapeList = [];
-var shapeData = tableData.map(shapeListFn => shapeListFn.shape);
 
-var shapeSelect = document.getElementById("shape");
-shapeData.forEach((shapeName) => {
-    if (!(shapeList.includes(shapeName))){     
-        shapeList.push(shapeName);
-        var opt = document.createElement("option");
-        opt.value = shapeName;
-        opt.text = toTitleCase(shapeName);
-        shapeSelect.appendChild(opt);
-    }
-});*/
-
-//generates list of states based on country selected
 var stateList = [];
 var stateSelect = document.getElementById("state");
 var cityList = [];
@@ -38,10 +25,9 @@ var citySelect = document.getElementById("city");
 var shapeList = [];
 var shapeSelect = document.getElementById("shape");
 
+//generates list of states based on country selected
 function myState(){
     var countrySel = countrySelect.value;
-    
-    console.log(countrySel); 
     
     removeAll(stateSelect);
     stateList = [];
@@ -70,10 +56,9 @@ function myState(){
 }
 
 //generates the list of cities based on state selected
-
 function myCity(){
     var stateSel = d3.select("#state").node().value;
-    console.log(stateSel)
+    
     removeAll(citySelect);
     var opt = document.createElement("option");
     opt.value = "selection";
@@ -85,10 +70,9 @@ function myCity(){
     citySelect.appendChild(opt);
 
     if(stateSel === 'all'){
-        console.log(stateSel)
-        
+           
         removeAll(shapeSelect);
-        console.log("inside all");
+        
         list1 = [];
         list2 = [];
         var stateData = tableData.filter(cityFn => cityFn.country == countrySelect.value);
@@ -97,7 +81,7 @@ function myCity(){
             var shape = stateFn.shape;
             
             if (!(list1.includes(city))){
-                console.log(list1);
+                
                 list1.push(city);
                 var opt = document.createElement("option");
                 opt.value = city;
@@ -105,7 +89,6 @@ function myCity(){
                 citySelect.appendChild(opt);
             }
             if (!(list2.includes(shape))){
-        
                 list2.push(shape);
                 var opt = document.createElement("option");
                 opt.value = shape;
@@ -113,7 +96,6 @@ function myCity(){
                 shapeSelect.appendChild(opt);
             }
         })
-        console.log(stateData);
     }
     else{
     
@@ -149,7 +131,7 @@ function myShape(){
     shapeSelect.appendChild(opt);
 
     var citySel  = d3.select("#city").node().value;
-    console.log(citySel)
+    
     if (citySel == "all" && stateSelect.value == "all"){
         var slist = [];
         var sData = tableData.filter(cityFn => cityFn.country == countrySelect.value);
@@ -166,9 +148,7 @@ function myShape(){
     });
     }
     else if(citySel === 'all'){
-        console.log("City selected all")
         
-        console.log("inside all");
         list2 = [];
         var cityData = tableData.filter(shapeFn => shapeFn.state == stateSelect.value);
         cityData.map(function(stateFn){
@@ -183,7 +163,6 @@ function myShape(){
                 shapeSelect.appendChild(opt);
             }
         })
-        //console.log(stateData);
     }
     
     else{ 
@@ -221,6 +200,7 @@ function toTitleCase(str) {
     );
 }
 
+//To check if the option to filter is provided or not
 function isEmpty(s){
     return !s.length;    
 }
@@ -230,7 +210,7 @@ function isBlank(s){
 }
 
 //***************************
-//appends a table to the web page and then adds new rows of data for each UFO sighting
+//appends a table to the web page and then adds new rows of data for each UFO sighting on Page load
 var ufoTableBody = d3.select("tbody");
 function tableLoad(){
 tableData.forEach( (ufoReport) =>{
@@ -244,9 +224,8 @@ tableData.forEach( (ufoReport) =>{
 });
 }
 tableLoad();
-//countryLoad();
-//stateLoad();
-//search through the `date/time` column to find rows that match user input
+
+//search through the table to find rows that match user input
 var ufoButton = d3.select("#filter-btn");
 var ufoForm = d3.select("#form");
 
@@ -256,120 +235,80 @@ ufoForm.on("submit", runEnter);
 function runEnter(){
     d3.event.preventDefault();
 
+    //Retrieve all the chosen values to filter
     var inputElement = d3.select("#datetime");
-
     var filterDate = inputElement.property("value");
-
-    console.log(`Country:${countrySelect.value}`);
-    console.log(`State:${stateSelect.value}`);
-    console.log(`City:${citySelect.value}`);
-    //console.log(`Shape:${shapeSelect.value}`);
-    console.log(`Date:${filterDate}`);
 
     var country = d3.select("#country").node().value;
     var state = d3.select("#state").node().value;
     var city = d3.select("#city").node().value;
     var shape = d3.select('#shape').node().value;
-        
+    
+    //Several conditions to filter the table data based on the user input
     if (!(isBlank(country))){
         var countryTable = tableData.filter(ufoSightings => (ufoSightings.country === country));
-        console.log("Filter country")
+        
     }
     else{
         var filteredTable = tableData;
-        console.log("without Filter country")
-        console.log(filteredTable);
     }
+
     if (!(isBlank(state)) && (state != "all")){
         var stateTable = countryTable.filter(ufoSightings => (ufoSightings.state === state));
-        console.log("Filter state")
-        console.log(stateTable);
     }
     else if (!(isBlank(state)) && (state === "all")){
         var stateTable = countryTable;
-        console.log("Filter all state")
-        console.log(stateTable);
     }
     else{
         var filteredTable = countryTable;
-        console.log("without Filter state")
-        console.log(filteredTable);
     }
+
     if (!(isBlank(city)) && (city != "all")){
         var cityTable = stateTable.filter(ufoSightings => (ufoSightings.city === city));
-        console.log(cityTable);
-        console.log("Filter city")
     }
     else if (!(isBlank(city)) && (city === "all")){
-        stateTable.map(function (shapeListFn) {
-            if (shapeListFn.state == state){
-                var shape = shapeListFn.shape;
-                if (!(shapeList.includes(shape))){
-            
-                    shapeList.push(shape);
-                    var opt = document.createElement("option");
-                    opt.value = shape;
-                    opt.text = toTitleCase(shape);
-                    shapeSelect.appendChild(opt);
-                }
-            }
-        })
         var cityTable = stateTable;
-        console.log("Filter all city")
-        console.log(cityTable);
     }
     else{
         var filteredTable = stateTable;
-        console.log("without Filter city")
-        console.log(filteredTable);
+        
     }
     if (!(isBlank(shape)) && (shape != "all")){
         var shapeTable = cityTable.filter(ufoSightings => (ufoSightings.shape === shape));
-        console.log("Filter shape")
-        console.log(shapeTable);
+        
     }
     else if (!(isBlank(shape)) && (shape === "all")){
-        var shapeTable = cityTable;
-        console.log("Filter all shape")
-        console.log(shapeTable);
+        var shapeTable = cityTable;    
     }
     else{
         var filteredTable = cityTable;
-        console.log("without Filter shape")
-        console.log(filteredTable);
     }
     if (!(isBlank(filterDate))){
         var dateTable = shapeTable.filter(ufoSightings => (ufoSightings.datetime === filterDate));
-        console.log("Filter date")
-        console.log(dateTable);
     }
     else{
         var filteredTable = shapeTable;
-        console.log("without Filter date")
-        console.log(filteredTable);
     }
     
 
     if (dateTable != null){
         var filteredTable = dateTable;
     }
-    console.log("Final table");
-    console.log(filteredTable);
 
+    //Alerts if no records are found for the criteria
     if (filteredTable.length == 0){
         ufoTableBody.html("");
-        console.log("No records found");
+        
         window.alert("No matches found for the filter criteria. Please try some other combination!")
     }
     else{
-    //console.log(filteredTable);
+        //Clear the previous table
         ufoTableBody.html("");
-
+        //Load the filtered data into table
         filteredTable.forEach( (ufoReport) =>{
             var ufoRow = ufoTableBody.append("tr");
         
             Object.entries(ufoReport).forEach(([key,value]) => {
-                //console.log(key,value);
                 var ufoCell = ufoRow.append("td");
                 ufoCell.text(value);
             });
