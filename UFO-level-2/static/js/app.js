@@ -33,12 +33,22 @@ shapeData.forEach((shapeName) => {
 //generates list of states based on country selected
 var stateList = [];
 var stateSelect = document.getElementById("state");
+var cityList = [];
+var citySelect = document.getElementById("city");
+var shapeList = [];
+var shapeSelect = document.getElementById("shape");
+
 function myState(){
     var countrySel = countrySelect.value;
-
+    
+    console.log(countrySel); 
+    
     removeAll(stateSelect);
-
     stateList = [];
+    var opt = document.createElement("option");
+    opt.value = "selection";
+    opt.text = "<--Select-->";
+    stateSelect.appendChild(opt);
     var opt = document.createElement("option");
     opt.value = "all";
     opt.text = "All";
@@ -60,14 +70,49 @@ function myState(){
 }
 
 //generates the list of cities based on state selected
-var cityList = [];
-var citySelect = document.getElementById("city");
-function myCity(){
-    var stateSel = stateSelect.value;
 
+function myCity(){
+    var stateSel = d3.select("#state").node().value;
+    console.log(stateSel)
+    if(stateSel === 'all'){
+        console.log(stateSel)
+        removeAll(citySelect);
+        removeAll(shapeSelect);
+        console.log("inside all");
+        list1 = [];
+        list2 = [];
+        var stateData = tableData.filter(cityFn => cityFn.country == countrySelect.value);
+        stateData.map(function(stateFn){
+            var city = stateFn.city;
+            var shape = stateFn.shape;
+            
+            if (!(list1.includes(city))){
+                console.log(list1);
+                list1.push(city);
+                var opt = document.createElement("option");
+                opt.value = city;
+                opt.text = toTitleCase(city);
+                citySelect.appendChild(opt);
+            }
+            if (!(list2.includes(shape))){
+        
+                list2.push(shape);
+                var opt = document.createElement("option");
+                opt.value = shape;
+                opt.text = toTitleCase(shape);
+                shapeSelect.appendChild(opt);
+            }
+        })
+        console.log(stateData);
+    }
+    else{
     removeAll(citySelect);
 
     cityList = [];
+    var opt = document.createElement("option");
+    opt.value = "selection";
+    opt.text = "<--Select-->";
+    citySelect.appendChild(opt);
     var opt = document.createElement("option");
     opt.value = "all";
     opt.text = "All";
@@ -85,12 +130,10 @@ function myCity(){
                 citySelect.appendChild(opt);
             }
         }
-    })
+    })}
 }
 
 //generate the shape of UFO's spotted
-var shapeList = [];
-var shapeSelect = document.getElementById("shape");
 function myShape(){
     
     var citySel = citySelect.value;
@@ -98,6 +141,10 @@ function myShape(){
     removeAll(shapeSelect);
 
     shapeList = [];
+    var opt = document.createElement("option");
+    opt.value = "selection";
+    opt.text = "<--Select-->";
+    shapeSelect.appendChild(opt);
     var opt = document.createElement("option");
     opt.value = "all";
     opt.text = "All";
@@ -180,12 +227,11 @@ function runEnter(){
     //console.log(`Shape:${shapeSelect.value}`);
     console.log(`Date:${filterDate}`);
 
-    var country = countrySelect.value;
-    var state = stateSelect.value;
-    var city = citySelect.value;
+    var country = d3.select("#country").node().value;
+    var state = d3.select("#state").node().value;
+    var city = d3.select("#city").node().value;
     var shape = d3.select('#shape').node().value;
-    console.log(`Shape:${shape}`);
-    
+        
     if (!(isBlank(country))){
         var countryTable = tableData.filter(ufoSightings => (ufoSightings.country === country));
         console.log("Filter country")
