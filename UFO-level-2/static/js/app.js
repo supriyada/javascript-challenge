@@ -16,6 +16,20 @@ countryData.forEach((countryName) => {
     }
 });
 
+/*var shapeList = [];
+var shapeData = tableData.map(shapeListFn => shapeListFn.shape);
+
+var shapeSelect = document.getElementById("shape");
+shapeData.forEach((shapeName) => {
+    if (!(shapeList.includes(shapeName))){     
+        shapeList.push(shapeName);
+        var opt = document.createElement("option");
+        opt.value = shapeName;
+        opt.text = toTitleCase(shapeName);
+        shapeSelect.appendChild(opt);
+    }
+});*/
+
 //generates list of states based on country selected
 var stateList = [];
 var stateSelect = document.getElementById("state");
@@ -121,6 +135,14 @@ function toTitleCase(str) {
     );
 }
 
+function isEmpty(s){
+    return !s.length;    
+}
+
+function isBlank(s){
+    return isEmpty(s.trim());    
+}
+
 //***************************
 //appends a table to the web page and then adds new rows of data for each UFO sighting
 var ufoTableBody = d3.select("tbody");
@@ -155,64 +177,100 @@ function runEnter(){
     console.log(`Country:${countrySelect.value}`);
     console.log(`State:${stateSelect.value}`);
     console.log(`City:${citySelect.value}`);
-    console.log(`Shape:${shapeSelect.value}`);
+    //console.log(`Shape:${shapeSelect.value}`);
     console.log(`Date:${filterDate}`);
 
     var country = countrySelect.value;
     var state = stateSelect.value;
     var city = citySelect.value;
-    var shape = shapeSelect.value;
+    var shape = d3.select('#shape').node().value;
+    console.log(`Shape:${shape}`);
     
     if (!(isBlank(country))){
-        if((!(isBlank(state))) && (state != "all")){
-            if((!(isBlank(city))) && (city != "all")){
-                if((!(isBlank(shape))) && (shape != "all")){
-                    if(!(isBlank(filterDate))){
-                        var filteredTable = tableData.filter(ufoSightings => 
-                            ((ufoSightings.datetime === filterDate) && (ufoSightings.country === country)
-                            && (ufoSightings.state === state) && (ufoSightings.city === city)
-                            && (ufoSightings.shape === shape)));
-                    }
-                    else{
-                        var filteredTable = tableData.filter(ufoSightings => 
-                            ((ufoSightings.country === country)
-                            && (ufoSightings.state === state) && (ufoSightings.city === city)
-                            && (ufoSightings.shape === shape)));
-                    }
-                 
-                }
-                else if((!(isBlank(city))) && (city === "all")){
-                    var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country)) 
-                    && (ufoSightings.state === state) && (ufoSightings.city === city));
-                    
-                }
-                else{
-                    var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country))
-                    && (ufoSightings.state === state) && (ufoSightings.city === city));
-                }          
-            }
-            else if((!(isBlank(city))) && (city === "all")){
-                var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country)) 
-                && (ufoSightings.state === state));
-            }
-            else{
-                var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country))
-                && (ufoSightings.state === state));
-            }
-        
-        }
-        else if((!(isBlank(state))) && (state === "all")){
-            var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country)));
-        }
-        else{
-            var filteredTable = tableData.filter(ufoSightings => ((ufoSightings.country === country)));
-        }
+        var countryTable = tableData.filter(ufoSightings => (ufoSightings.country === country));
+        console.log("Filter country")
     }
     else{
-        tableLoad();
+        var filteredTable = tableData;
+        console.log("without Filter country")
+        console.log(filteredTable);
+    }
+    if (!(isBlank(state)) && (state != "all")){
+        var stateTable = countryTable.filter(ufoSightings => (ufoSightings.state === state));
+        console.log("Filter state")
+        console.log(stateTable);
+    }
+    else if (!(isBlank(state)) && (state === "all")){
+        var stateTable = countryTable;
+        console.log("Filter all state")
+        console.log(stateTable);
+    }
+    else{
+        var filteredTable = countryTable;
+        console.log("without Filter state")
+        console.log(filteredTable);
+    }
+    if (!(isBlank(city)) && (city != "all")){
+        var cityTable = stateTable.filter(ufoSightings => (ufoSightings.city === city));
+        console.log(cityTable);
+        console.log("Filter city")
+    }
+    else if (!(isBlank(city)) && (city === "all")){
+        stateTable.map(function (shapeListFn) {
+            if (shapeListFn.state == state){
+                var shape = shapeListFn.shape;
+                if (!(shapeList.includes(shape))){
+            
+                    shapeList.push(shape);
+                    var opt = document.createElement("option");
+                    opt.value = shape;
+                    opt.text = toTitleCase(shape);
+                    shapeSelect.appendChild(opt);
+                }
+            }
+        })
+        var cityTable = stateTable;
+        console.log("Filter all city")
+        console.log(cityTable);
+    }
+    else{
+        var filteredTable = stateTable;
+        console.log("without Filter city")
+        console.log(filteredTable);
+    }
+    if (!(isBlank(shape)) && (shape != "all")){
+        var shapeTable = cityTable.filter(ufoSightings => (ufoSightings.shape === shape));
+        console.log("Filter shape")
+        console.log(shapeTable);
+    }
+    else if (!(isBlank(shape)) && (shape === "all")){
+        var shapeTable = cityTable;
+        console.log("Filter all shape")
+        console.log(shapeTable);
+    }
+    else{
+        var filteredTable = cityTable;
+        console.log("without Filter shape")
+        console.log(filteredTable);
+    }
+    if (!(isBlank(filterDate))){
+        var dateTable = shapeTable.filter(ufoSightings => (ufoSightings.datetime === filterDate));
+        console.log("Filter date")
+        console.log(dateTable);
+    }
+    else{
+        var filteredTable = shapeTable;
+        console.log("without Filter date")
+        console.log(filteredTable);
+    }
+    
+
+    if (dateTable != null){
+        var filteredTable = dateTable;
     }
 
     if (filteredTable == null){
+        ufoTableBody.html("");
         console.log("No records found");
     }
     else{
